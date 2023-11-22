@@ -1,22 +1,49 @@
 import { StatusBar } from 'expo-status-bar';
+import { useTranslation } from './src/use-translation';
 import { StyleSheet, Text, View } from 'react-native';
-import { getLocales } from "expo-localization";
-import { I18n } from "i18n-js";
-
-const i18n = new I18n({
-  en : { welcome: 'Hello' },
-  ko : { welcome: '안녕하세요' }
-})
-
-const deviceLanguage = getLocales()[1].languageCode;
-i18n.locale = deviceLanguage;
+import Button from './src/Button';
+import { useCookie } from './src/use-cookie';
 
 export default function App() {
+  const {
+    t,
+    locale,
+    setLocale,
+  } = useTranslation();
+
+  const {cookieKey} = useCookie();
+
+  if (locale === null)
+    return null;
+
   return (
     <View style={styles.container}>
-      <Text>{deviceLanguage}</Text>
-      <Text>{i18n.t('welcome')}</Text>
-      <StatusBar style="auto" />
+      <Text>{t(cookieKey)}</Text>
+
+      <View style={styles.buttonsContainer}>
+        <Button
+          onPress={() => setLocale('ko')}
+          isSelected={locale === 'ko'}
+          text="KO"
+        />
+        <Button
+          onPress={() => setLocale('en')}
+          isSelected={locale === 'en'}
+          text="EN"
+        />
+        <Button
+          onPress={() => setLocale('ja')}
+          isSelected={locale === 'ja'}
+          text="JA"
+        />
+        <Button
+          onPress={() => setLocale('zh')}
+          isSelected={locale === 'zh'}
+          text="ZH"
+        />
+      </View>
+
+      {/* <StatusBar style="auto" /> */}
     </View>
   );
 }
@@ -24,8 +51,12 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    // backgroundColor: '#fff',
+    backgroundColor: 'purple',
     alignItems: 'center',
     justifyContent: 'center',
   },
+  buttonsContainer: {
+    flexDirection: 'row'
+  }
 });
