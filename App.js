@@ -14,11 +14,12 @@ export default function App() {
     t,
     locale,
     setLocale,
+    format,
   } = useTranslation();
 
   const {cookieKey} = useCookie();
-
   const [isLoaded, setIsLoaded] = useState(false);
+  const todayText = format(t('today_is'), 2023, 11, 25);
 
   useEffect(() => {
     if (cookieKey !== '')
@@ -36,6 +37,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
+      <Text>{todayText}</Text>
       <Text>{t(cookieKey)}</Text>
 
       <View style={styles.buttonsContainer}>
