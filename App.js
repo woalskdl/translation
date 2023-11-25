@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import Button from './src/Button';
 import { useCookie } from './src/use-cookie';
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -17,14 +17,21 @@ export default function App() {
 
   const {cookieKey} = useCookie();
 
-  useEffect(() => {
-    setTimeout(() => {
-      SplashScreen.hideAsync();
-    }, 2000)
-  }, [])
+  const [isLoaded, setIsLoaded] = useState(false);
 
-  if (locale === null)
-    return null;
+  useEffect(() => {
+    if (locale !== null && cookieKey !== '')
+    setIsLoaded(true);
+  }, [locale, cookieKey])
+
+  useEffect(() => {
+    if (isLoaded)
+      SplashScreen.hideAsync();
+  }, [isLoaded])
+
+
+  // if (locale === null || cookieKey === '')
+  //   return null;
 
   return (
     <View style={styles.container}>
