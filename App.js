@@ -3,6 +3,10 @@ import { useTranslation } from './src/use-translation';
 import { StyleSheet, Text, View } from 'react-native';
 import Button from './src/Button';
 import { useCookie } from './src/use-cookie';
+import * as SplashScreen from 'expo-splash-screen';
+import { useEffect } from 'react';
+
+SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const {
@@ -12,6 +16,12 @@ export default function App() {
   } = useTranslation();
 
   const {cookieKey} = useCookie();
+
+  useEffect(() => {
+    setTimeout(() => {
+      SplashScreen.hideAsync();
+    }, 2000)
+  }, [])
 
   if (locale === null)
     return null;
