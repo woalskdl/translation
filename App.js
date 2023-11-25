@@ -7,6 +7,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState } from 'react';
 import LoadingView from './src/LoadingView';
 import LottieView from 'lottie-react-native';
+import { useFonts } from 'expo-font';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -20,6 +21,10 @@ export default function App() {
 
   const {cookieKey} = useCookie();
   const [isLoaded, setIsLoaded] = useState(false);
+
+  const [fontsLoaded] = useFonts({
+    'RIDIBatang': require('./assets/fonts/RIDIBatang.otf'), // https://ridicorp.com/ridibatang
+  });
 
   const y = new Date().getFullYear();
   const m = new Date().getMonth() + 1;
@@ -40,9 +45,9 @@ export default function App() {
   }, [cookieKey])
 
   useEffect(() => {
-    if (locale !== null)
+    if (locale !== null && fontsLoaded)
       SplashScreen.hideAsync();
-  }, [locale])
+  }, [locale, fontsLoaded])
 
 
   if (!isLoaded)
@@ -70,6 +75,7 @@ export default function App() {
           <View style={styles.buttonsContainer}>
             {locales.map(item => (
               <Button
+                key={`locale_key_${item}`}
                 onPress={() => setLocale(item)}
                 isSelected={locale === item}
                 text={item.toUpperCase()}
@@ -93,12 +99,14 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   todayText: {
+    fontFamily: 'RIDIBatang',
     position: 'absolute',
     top: 70,
     fontSize: 13,
     color: '#8b658f',
   },
   cookieText: {
+    fontFamily: 'RIDIBatang',
     fontSize: 22,
     color: '#372538',
     textAlign: 'center',
